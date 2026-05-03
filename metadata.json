@@ -1,0 +1,12 @@
+{
+  "name": "CloudPhoto",
+  "description": "A professional-grade image editing interface with real-time stream overlays and social features.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "Image Editing",
+    "Real-time Collaboration"
+  ]
+}

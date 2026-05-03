@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+body {
+  @apply bg-[#121212] text-[#e0e0e0] font-sans antialiased overflow-hidden;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-[#1a1a1a];
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-[#3a3a3a] rounded-full hover:bg-[#4a4a4a] transition-colors;
+}
+
+.custom-shadow {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
