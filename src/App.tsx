@@ -31,33 +31,31 @@ import { useState, useEffect, useRef } from 'react';
 // --- Sub-components ---
 
 const TopNav = () => (
-  <nav className="h-10 bg-[#252525] border-b border-[#111] flex items-center justify-between px-3 text-xs select-none">
-    <div className="flex items-center gap-4">
-      <div className="w-6 h-6 bg-blue-500 rounded flex items-center justify-center font-bold text-white text-[10px]">PS</div>
-      <div className="flex gap-3 text-gray-300">
+  <nav className="h-10 sm:h-12 bg-[#252525] border-b border-[#111] flex items-center justify-between px-3 text-xs select-none z-50">
+    <div className="flex items-center gap-3 sm:gap-4">
+      <div className="w-6 h-6 sm:w-8 sm:h-8 bg-blue-500 rounded flex items-center justify-center font-bold text-white text-[10px] sm:text-xs">PS</div>
+      <div className="hidden md:flex gap-3 text-gray-300">
         <span className="hover:text-white cursor-pointer transition-colors">File</span>
         <span className="hover:text-white cursor-pointer transition-colors">Edit</span>
         <span className="hover:text-white cursor-pointer transition-colors">Image</span>
-        <span className="hover:text-white cursor-pointer transition-colors">Layer</span>
-        <span className="hover:text-white cursor-pointer transition-colors">Type</span>
-        <span className="hover:text-white cursor-pointer transition-colors">Select</span>
-        <span className="hover:text-white cursor-pointer transition-colors">Filter</span>
         <span className="hover:text-white cursor-pointer transition-colors">View</span>
-        <span className="hover:text-white cursor-pointer transition-colors">Window</span>
         <span className="hover:text-white cursor-pointer transition-colors">Help</span>
       </div>
-    </div>
-    <div className="flex-1 flex justify-center">
-       <span className="text-gray-500 text-[10px] tracking-widest font-mono">CLOUDPHOTO_PROJECT_01.PSD @ 66.7% (RGB/8#)</span>
-    </div>
-    <div className="flex items-center gap-4">
-      <div className="flex items-center gap-2 text-gray-400 bg-[#333] px-2 py-0.5 rounded border border-[#444] transition-all focus-within:border-blue-500/50">
-        <Search size={14} />
-        <span className="hidden sm:inline">Search actions...</span>
+      <div className="md:hidden">
+        <Menu size={20} className="text-gray-400" />
       </div>
-      <div className="flex items-center gap-3">
+    </div>
+    <div className="flex-1 flex justify-center px-4 overflow-hidden">
+       <span className="text-gray-500 text-[9px] sm:text-[10px] tracking-widest font-mono truncate">CLOUDPHOTO_PROJECT_01.PSD @ 66.7%</span>
+    </div>
+    <div className="flex items-center gap-2 sm:gap-4">
+      <div className="hidden sm:flex items-center gap-2 text-gray-400 bg-[#333] px-2 py-0.5 rounded border border-[#444] transition-all focus-within:border-blue-500/50">
+        <Search size={14} />
+        <span className="hidden lg:inline">Search...</span>
+      </div>
+      <div className="flex items-center gap-2 sm:gap-3">
         <Share2 size={16} className="text-gray-400 hover:text-white cursor-pointer" />
-        <div className="bg-blue-600 hover:bg-blue-500 text-white px-3 py-0.5 rounded cursor-pointer font-medium transition-colors">Share</div>
+        <div className="bg-blue-600 hover:bg-blue-500 text-white px-2 sm:px-3 py-1 rounded cursor-pointer font-medium transition-colors text-[10px] sm:text-xs">Share</div>
       </div>
     </div>
   </nav>
@@ -65,43 +63,57 @@ const TopNav = () => (
 
 const Toolbar = ({ activeTool, setActiveTool }: { activeTool: string, setActiveTool: (t: string) => void }) => {
   const tools = [
-    { id: 'move', icon: Move, label: 'Move Tool' },
-    { id: 'select', icon: MousePointer2, label: 'Selection Tool' },
-    { id: 'crop', icon: Crop, label: 'Crop Tool' },
-    { id: 'shape', icon: Square, label: 'Rectangle Tool' },
-    { id: 'circle', icon: Circle, label: 'Ellipse Tool' },
-    { id: 'pencil', icon: Pencil, label: 'Pencil Tool' },
-    { id: 'type', icon: Type, label: 'Text Tool' },
-    { id: 'eraser', icon: Eraser, label: 'Eraser Tool' },
+    { id: 'move', icon: Move, label: 'Move' },
+    { id: 'select', icon: MousePointer2, label: 'Select' },
+    { id: 'crop', icon: Crop, label: 'Crop' },
+    { id: 'shape', icon: Square, label: 'Rect' },
+    { id: 'pencil', icon: Pencil, label: 'Draw' },
+    { id: 'type', icon: Type, label: 'Text' },
   ];
 
   return (
-    <div className="w-12 bg-[#2b2b2b] border-r border-[#111] flex flex-col items-center py-4 gap-4 flex-shrink-0">
-      {tools.map((tool) => (
-        <button
-          key={tool.id}
-          onClick={() => setActiveTool(tool.id)}
-          className={`p-2 rounded-lg transition-all relative group ${
-            activeTool === tool.id 
-              ? 'bg-[#3d3d3d] text-blue-400 border border-[#444] shadow-inner' 
-              : 'text-gray-400 hover:text-white hover:bg-[#333]'
-          }`}
-        >
-          <tool.icon size={20} />
-          {/* Tooltip emulation */}
-          <div className="absolute left-full ml-2 px-2 py-1 bg-black text-white text-[10px] rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap hidden group-hover:block">
-            {tool.label}
-          </div>
-        </button>
-      ))}
-      <div className="mt-auto flex flex-col items-center gap-4 pb-2">
-        <div className="relative group cursor-pointer">
-          <div className="w-6 h-6 bg-white border border-gray-400 z-10 hover:translate-x-0.5 hover:-translate-y-0.5 transition-transform"></div>
-          <div className="w-6 h-6 bg-black border border-gray-600 absolute top-2 left-2"></div>
+    <>
+      {/* Desktop Sidebar Toolbar */}
+      <div className="hidden sm:flex w-12 bg-[#2b2b2b] border-r border-[#111] flex-col items-center py-4 gap-4 flex-shrink-0">
+        {tools.map((tool) => (
+          <button
+            key={tool.id}
+            onClick={() => setActiveTool(tool.id)}
+            className={`p-2 rounded-lg transition-all relative group ${
+              activeTool === tool.id 
+                ? 'bg-[#3d3d3d] text-blue-400 border border-[#444] shadow-inner' 
+                : 'text-gray-400 hover:text-white hover:bg-[#333]'
+            }`}
+          >
+            <tool.icon size={20} />
+            <div className="absolute left-full ml-2 px-2 py-1 bg-black text-white text-[10px] rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap hidden sm:block">
+              {tool.label}
+            </div>
+          </button>
+        ))}
+        <div className="mt-auto flex flex-col items-center gap-4 pb-2">
+          <Palette size={20} className="text-gray-400 hover:text-white cursor-pointer" />
         </div>
-        <Palette size={20} className="text-gray-400 hover:text-white cursor-pointer mt-4" />
       </div>
-    </div>
+
+      {/* Mobile Bottom Toolbar */}
+      <div className="sm:hidden fixed bottom-0 left-0 right-0 h-16 bg-[#252525] border-t border-[#111] flex items-center justify-around px-2 z-[60] pb-2">
+         {tools.map((tool) => (
+          <button
+            key={tool.id}
+            onClick={() => setActiveTool(tool.id)}
+            className={`flex flex-col items-center justify-center p-2 rounded-lg gap-1 transition-all ${
+              activeTool === tool.id 
+                ? 'text-blue-400' 
+                : 'text-gray-500'
+            }`}
+          >
+            <tool.icon size={18} />
+            <span className="text-[9px] font-medium">{tool.label}</span>
+          </button>
+        ))}
+      </div>
+    </>
   );
 };
 
@@ -303,7 +315,7 @@ export default function App() {
       <TopNav />
       
       {/* Sub-header / Options Bar */}
-      <div className="h-8 bg-[#2b2b2b] border-b border-[#111] flex items-center px-4 gap-6 text-[11px] text-gray-400 flex-shrink-0 select-none">
+      <div className="hidden sm:flex h-8 bg-[#2b2b2b] border-b border-[#111] items-center px-4 gap-6 text-[11px] text-gray-400 flex-shrink-0 select-none">
         <div className="flex items-center gap-2">
            <span className="font-medium">Mode:</span>
            <div className="bg-[#1a1a1a] px-2 py-0.5 rounded border border-[#3d3d3d] flex items-center gap-1 text-gray-200 cursor-pointer hover:bg-[#333]">
@@ -330,7 +342,7 @@ export default function App() {
         <Toolbar activeTool={activeTool} setActiveTool={setActiveTool} />
         
         {/* Canvas Area */}
-        <div className="flex-1 bg-[#1a1a1a] relative flex items-center justify-center overflow-auto p-40">
+        <div className="flex-1 bg-[#1a1a1a] relative flex items-center justify-center overflow-auto p-12 sm:p-40 pb-20 sm:pb-40">
            {/* Checkerboard background simulation */}
            <div 
              className="absolute inset-0 opacity-[0.03]"
@@ -343,8 +355,8 @@ export default function App() {
            <motion.div 
              className="bg-white shadow-2xl relative flex-shrink-0"
              style={{ 
-               width: '1000px', 
-               height: '600px',
+               width: 'min(90vw, 1000px)', 
+               height: 'min(50vh, 600px)',
                scale: zoom / 100
              }}
              layoutId="canvas"
@@ -352,15 +364,15 @@ export default function App() {
            >
               {/* Actual Canvas or placeholder content */}
               <div className="absolute inset-0 flex items-center justify-center bg-white">
-                 <div className="p-12 border-2 border-dashed border-gray-100 rounded-[2rem] flex flex-col items-center gap-6 animate-pulse">
-                    <History size={64} className="text-gray-50" />
-                    <span className="text-gray-200 font-medium font-sans text-xl uppercase tracking-widest">Workspace Initialized</span>
+                 <div className="p-6 sm:p-12 border-2 border-dashed border-gray-100 rounded-[2rem] flex flex-col items-center gap-4 sm:gap-6 animate-pulse text-center">
+                    <History size={48} className="text-gray-50 flex-shrink-0" />
+                    <span className="text-gray-200 font-medium font-sans text-sm sm:text-lg lg:text-xl uppercase tracking-widest px-4">Workspace Initialized</span>
                  </div>
               </div>
            </motion.div>
 
            {/* Zoom indicator */}
-           <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-5 bg-[#2b2b2b]/95 backdrop-blur-xl px-5 py-2 rounded-full border border-white/10 text-[11px] text-gray-400 select-none z-20 shadow-2xl">
+           <div className="absolute bottom-20 sm:bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-5 bg-[#2b2b2b]/95 backdrop-blur-xl px-5 py-2 rounded-full border border-white/10 text-[11px] text-gray-400 select-none z-20 shadow-2xl">
               <button 
                 onClick={() => setZoom(z => Math.max(10, z - 10))}
                 className="hover:text-white transition-colors p-1"
@@ -375,18 +387,20 @@ export default function App() {
 
         <Inspector />
 
-        {/* Overlays */}
-        <StreamerCam />
-        <ChatOverlay />
+        {/* Overlays - Repositioned for mobile */}
+        <div className="hidden sm:block">
+          <StreamerCam />
+          <ChatOverlay />
+        </div>
                 
         {/* Floating Tooltips or Status */}
-        <div className="absolute top-4 left-64 bg-black/60 backdrop-blur-md px-3 py-1 rounded-md border border-white/10 text-[10px] pointer-events-none select-none z-10">
+        <div className="hidden sm:block absolute top-4 left-64 bg-black/60 backdrop-blur-md px-3 py-1 rounded-md border border-white/10 text-[10px] pointer-events-none select-none z-10">
            Canvas Area (Centered)
         </div>
       </main>
 
-      {/* Footer / Status Bar */}
-      <footer className="h-6 bg-blue-600 border-t border-blue-700 flex items-center px-4 justify-between text-[10px] text-white flex-shrink-0 z-50">
+      {/* Footer / Status Bar - Hidden on small mobile */}
+      <footer className="hidden sm:flex h-6 bg-blue-600 border-t border-blue-700 items-center px-4 justify-between text-[10px] text-white flex-shrink-0 z-50">
         <div className="flex items-center gap-6 font-medium">
            <span className="flex items-center gap-1"><Settings size={10} /> System: Online</span>
            <span>Doc: 3.29M / 3.29M</span>
